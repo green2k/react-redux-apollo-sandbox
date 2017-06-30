@@ -1,16 +1,31 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import {createStore} from 'redux'
-import {Provider} from 'react-redux'
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
+import {ApolloClient, createNetworkInterface, ApolloProvider} from "react-apollo"
 
 import reducers from './reducers'
-import {App} from "./components/App";
+import opportunityReducer from './reducers/opportunities'
+import {App} from './components/App'
 
-let store = createStore(reducers)
+let client = new ApolloClient({
+	networkInterface: createNetworkInterface({
+		uri: 'https://pokeapi-graphiql.herokuapp.com'
+	})
+})
+let store = createStore(
+	combineReducers({
+		opportunities: opportunityReducer, 
+		apollo: client.reducer()
+	}), 
+	{}, // Initial state
+	compose(
+		applyMiddleware(client.middleware())
+	)
+);
 
 ReactDOM.render(
-	<Provider store={store}>
+	<ApolloProvider store={store} client={client}>
 		<App />
-	</Provider>,
+	</ApolloProvider>,
 	document.getElementById("root")
 );
