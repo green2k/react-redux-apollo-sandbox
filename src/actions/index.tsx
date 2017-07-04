@@ -1,10 +1,7 @@
-/*
- * Action creators
- */
-
-export const setFilter = (text: string) => {
+export const setCourseFilter = (age: number, language: string) => {
   return {
-    type: 'SET_FILTER',
-    text
+    type: 'COURSE_SET_FILTER',
+    age, 
+    language
   }
 }

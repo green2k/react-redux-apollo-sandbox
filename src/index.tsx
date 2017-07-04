@@ -1,20 +1,23 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
+import {MemoryRouter} from 'react-router-dom'
+import {ApolloClient, createNetworkInterface, ApolloProvider} from 'react-apollo'
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
-import {ApolloClient, createNetworkInterface, ApolloProvider} from "react-apollo"
 
-import reducers from './reducers'
-import opportunityReducer from './reducers/opportunities'
-import {App} from './components/App'
+import {courseFiltersReducer} from './reducers/course_filters'
+import App from './components/App'
 
+// Build Apollo client
 let client = new ApolloClient({
 	networkInterface: createNetworkInterface({
-		uri: 'https://pokeapi-graphiql.herokuapp.com'
+		uri: 'http://127.0.0.1:4000/graphql'
 	})
 })
+
+// Create Redux store
 let store = createStore(
 	combineReducers({
-		opportunities: opportunityReducer, 
+		courseFilter: courseFiltersReducer, 
 		apollo: client.reducer()
 	}), 
 	{}, // Initial state
@@ -23,9 +26,12 @@ let store = createStore(
 	)
 );
 
+// Render the application
 ReactDOM.render(
 	<ApolloProvider store={store} client={client}>
-		<App />
+		<MemoryRouter>
+			<App />
+		</MemoryRouter>
 	</ApolloProvider>,
 	document.getElementById("root")
 );

@@ -1,13 +1,15 @@
 import * as React from "react";
+import {Route} from 'react-router-dom'
 
-import {Header} from "./Header";
-import OpportunityList from "../containers/OpportunityList";
-import Pokemon from '../containers/Pokemon'
+import CourseFilterScreen from "../containers/CourseFilterScreen";
+import CourseListScreen from "../containers/CourseListScreen";
 
-export const App = () => (
+// Top-parent component
+const App = () => (
 	<div>
-		<Header numUsers="1000s" />
-		<OpportunityList />
-		<Pokemon />
+		<Route exact path='/' component={CourseFilterScreen} />
+		<Route exact path='/search' component={CourseListScreen} />
 	</div>
 );
+
+export default App
